@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>EMEX • Pesquisa de Satisfação</title>
+<title>EMEX - Pesquisa de Satisfacao</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -198,6 +198,8 @@
         .card { padding: 22px 18px; }
         h1 { font-size: 23px; }
         h2 { font-size: 18px; }
+        .actions { flex-direction: column; }
+        .actions .btn { width: 100%; }
     }
 </style>
 </head>
@@ -207,49 +209,54 @@
 <div class="shell">
     <div class="card">
         <img class="logo" src="LogoEmex.png" alt="EMEX LOGO">
-        <div class="tag">Pesquisa de satisfação • NPS</div>
+        <div class="tag">Pesquisa de satisfacao - NPS</div>
 
-        <h1>Queremos ouvir você, <span id="clienteNome">Cliente</span>!</h1>
-        <p>Conte para a <b>EMEX</b> como foi sua experiência. Sua opinião direciona nossas melhorias.</p>
+        <h1>Queremos ouvir voce, <span id="clienteNome">Cliente</span>!</h1>
+        <p>Conte para a <b>EMEX</b> como foi sua experiencia. Sua opiniao direciona nossas melhorias.</p>
 
         <h2>De 0 a 10, qual a probabilidade de indicar a EMEX?</h2>
         <div class="nps-scale" id="npsScale"></div>
         <div class="legend">
-            <span>Pouco provável</span>
-            <span>Muito provável</span>
+            <span>Pouco provavel</span>
+            <span>Muito provavel</span>
         </div>
 
         <h2>Explique sua nota</h2>
         <textarea class="textarea" id="comentario" placeholder="Digite sua resposta..."></textarea>
 
         <div class="actions">
-            <button class="btn btn-primary" id="enviar">Enviar feedback</button>
-            <button class="btn btn-secondary" id="googleBtn">Avaliar no Google</button>
+            <button class="btn btn-primary" id="enviar">Enviar</button>
         </div>
 
-        <div class="google-tip">Dica: você pode colar o link do seu Google Forms direto no código (variável <code>googleFormsLink</code>).</div>
-
         <div class="thank-you" id="thankYou">
-            <p id="mensagemFinal">Obrigado! Seu feedback é muito importante para nós.</p>
+            <p id="mensagemFinal">Obrigado! Seu feedback e muito importante para nos.</p>
             <img class="gif" src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Gif de agradecimento">
         </div>
     </div>
 
     <div class="footer">
-        Desenvolvido por <b>EMEX</b>
+        Desenvolvido por <b>Joao Porto</b>
     </div>
 </div>
 
 <script>
-    // Configurar link do Google Forms aqui (se não tiver, deixa em branco)
-    const googleFormsLink = "";
+    const googleReviewLink = "https://g.page/r/CbtxDmKG0tleEAE/review";
+    const whatsappNumber = "558000243200";
+    const whatsappMessage = encodeURIComponent("Pesquisa de Satisfacao");
 
-    // Captura o nome do cliente pela URL: ?nome=Maycon
+    // Se quiser registrar no Google Forms, coloque o formResponse e os IDs dos campos
+    const googleFormsAction = ""; // ex: "https://docs.google.com/forms/d/e/FORM_ID/formResponse"
+    const googleFormsFields = {
+        name: "",    // ex: "entry.123456"
+        score: "",   // ex: "entry.789012"
+        comment: ""  // ex: "entry.345678"
+    };
+
     const urlParams = new URLSearchParams(window.location.search);
-    const nome = urlParams.get('nome') || "Cliente";
+    const nome = urlParams.get("nome") || "Cliente";
     document.getElementById("clienteNome").textContent = nome;
 
-    // Monta botões NPS com cores de 0 a 10
+    // Monta botoes NPS com cores de 0 a 10
     const npsScale = document.getElementById("npsScale");
     const colors = ["#b90f23", "#c21b1f", "#d12f1c", "#e1491c", "#f26b21", "#f9a22b", "#d6c522", "#c8dd2b", "#98c93d", "#70bb43", "#42a34b"];
     let selectedScore = null;
@@ -272,31 +279,55 @@
     const mensagemFinal = document.getElementById("mensagemFinal");
     const comentario = document.getElementById("comentario");
 
-    document.getElementById("enviar").addEventListener("click", () => {
+    const submitToGoogleForms = async ({ name, score, comment }) => {
+        if (!googleFormsAction || !googleFormsFields.name || !googleFormsFields.score || !googleFormsFields.comment) {
+            return;
+        }
+        const data = new FormData();
+        data.append(googleFormsFields.name, name);
+        data.append(googleFormsFields.score, score);
+        data.append(googleFormsFields.comment, comment);
+        try {
+            await fetch(googleFormsAction, { method: "POST", mode: "no-cors", body: data });
+        } catch (err) {
+            console.error("Falha ao enviar para Google Forms", err);
+        }
+    };
+
+    const openWhatsApp = () => {
+        const waLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+        window.location.href = waLink;
+    };
+
+    const openGoogleReview = () => {
+        window.location.href = googleReviewLink;
+    };
+
+    document.getElementById("enviar").addEventListener("click", async () => {
         if (selectedScore === null) {
             alert("Escolha uma nota de 0 a 10.");
             return;
         }
 
         const texto = comentario.value.trim();
-        mensagemFinal.innerHTML = `${nome}, obrigado! Sua nota <b>${selectedScore}</b> e comentário foram registrados.`;
         thankYou.style.display = "block";
 
-        // Se quiser mandar para o Google Forms, basta colar o link acima
-        if (googleFormsLink) {
-            window.open(googleFormsLink, "_blank");
-        }
-    });
+        await submitToGoogleForms({ name: nome, score: selectedScore, comment: texto });
 
-    document.getElementById("googleBtn").addEventListener("click", () => {
-        if (!googleFormsLink) {
-            alert("Adicione seu link do Google Forms na variável googleFormsLink.");
+        if (selectedScore <= 6) {
+            mensagemFinal.innerHTML = `${nome}, sentimos muito! :( Vamos te atender no WhatsApp para resolver.`;
+            setTimeout(openWhatsApp, 400);
             return;
         }
-        window.open(googleFormsLink, "_blank");
-    });
 
-    // Nenhum redirecionamento automático; tudo acontece na página.
+        if (selectedScore === 10) {
+            mensagemFinal.innerHTML = `${nome}, obrigado! :) Voce sera redirecionado para avaliar no Google.`;
+            setTimeout(openGoogleReview, 400);
+            return;
+        }
+
+        mensagemFinal.innerHTML = `${nome}, obrigado! :) Sua nota <b>${selectedScore}</b> foi registrada.`;
+    });
 </script>
 
 </body>

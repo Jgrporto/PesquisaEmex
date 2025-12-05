@@ -2,90 +2,301 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>EMEX — Obrigado pelo seu feedback</title>
+<title>EMEX • Pesquisa de Satisfação</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        padding: 0;
-        margin: 0;
-        background-color: #0e2a47;
-        color: #f4f6fb;
+    :root {
+        --bg: #0e2a47;
+        --card: #0f3356;
+        --card-2: #123c67;
+        --text: #f4f6fb;
+        --muted: #c7d3e6;
+        --accent: #ff9f1c;
+        --accent-2: #56cfe1;
+        --shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
     }
 
-    .container {
-        padding: 20px;
-        max-width: 600px;
-        margin: auto;
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+        padding: 0;
+        margin: 0;
+        background: radial-gradient(circle at 20% 20%, rgba(255, 159, 28, 0.12), transparent 25%), radial-gradient(circle at 80% 0%, rgba(86, 207, 225, 0.22), transparent 30%), var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 32px 16px 48px;
+    }
+
+    .shell {
+        width: 100%;
+        max-width: 720px;
+    }
+
+    .card {
+        background: linear-gradient(135deg, var(--card), var(--card-2));
+        border-radius: 18px;
+        padding: 28px 24px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(4px);
     }
 
     .logo {
-        width: 150px;
-        margin: 30px auto 10px auto;
+        width: 140px;
         display: block;
+        margin: 0 auto 8px;
+    }
+
+    .tag {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--muted);
+        font-size: 13px;
+        margin: 8px auto 16px;
+    }
+
+    h1 {
+        margin: 10px 0 6px;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        text-align: center;
     }
 
     h2 {
-        font-size: 26px;
-        font-weight: bold;
-        margin-top: 10px;
+        font-size: 20px;
+        font-weight: 600;
+        margin: 12px 0 8px;
+        text-align: center;
     }
 
     p {
-        font-size: 18px;
-        margin: 10px 25px;
+        margin: 0 0 12px;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.5;
+        text-align: center;
+    }
+
+    .nps-scale {
+        margin: 20px 0 12px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+        gap: 10px;
+    }
+
+    .score-btn {
+        border: none;
+        border-radius: 12px;
+        padding: 12px 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #fff;
+        cursor: pointer;
+        transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .score-btn:hover { transform: translateY(-2px); opacity: 0.92; }
+    .score-btn.selected { outline: 2px solid rgba(255, 255, 255, 0.9); box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35); }
+
+    .legend {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--muted);
+        font-size: 14px;
+        margin: 4px 2px 18px;
+    }
+
+    .textarea {
+        width: 100%;
+        min-height: 120px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+        padding: 12px 14px;
+        font-size: 15px;
+        resize: vertical;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .actions {
+        margin-top: 16px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .btn {
+        padding: 12px 18px;
+        border-radius: 12px;
+        border: none;
+        color: #0b223a;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--accent), #ff6b35);
+        box-shadow: 0 12px 26px rgba(255, 111, 53, 0.35);
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, var(--accent-2), #4ea8de);
+        color: #05233b;
+        box-shadow: 0 12px 26px rgba(78, 168, 222, 0.28);
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .thank-you {
+        margin-top: 22px;
+        text-align: center;
+        padding: 16px 14px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        display: none;
     }
 
     .gif {
-        width: 95%;
-        max-width: 500px;
-        margin-top: 20px;
-        border-radius: 12px;
+        width: 100%;
+        max-width: 520px;
+        margin: 14px auto 6px;
+        border-radius: 16px;
+        display: block;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
     }
 
     .footer {
-        margin-top: 40px;
-        font-size: 14px;
-        color: #c7d3e6;
-        padding-bottom: 20px;
+        text-align: center;
+        margin-top: 18px;
+        font-size: 13px;
+        color: var(--muted);
+    }
+
+    .google-tip {
+        margin-top: 10px;
+        font-size: 13px;
+        color: var(--muted);
+    }
+
+    @media (max-width: 520px) {
+        body { padding: 22px 12px 36px; }
+        .card { padding: 22px 18px; }
+        h1 { font-size: 23px; }
+        h2 { font-size: 18px; }
     }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="shell">
+    <div class="card">
+        <img class="logo" src="LogoEmex.png" alt="EMEX LOGO">
+        <div class="tag">Pesquisa de satisfação • NPS</div>
 
-    <!-- LOGO EMEX -->
-    <img class="logo" src="LogoEmex.png" alt="EMEX LOGO">
+        <h1>Queremos ouvir você, <span id="clienteNome">Cliente</span>!</h1>
+        <p>Conte para a <b>EMEX</b> como foi sua experiência. Sua opinião direciona nossas melhorias.</p>
 
-    <!-- NOME DO CLIENTE -->
-    <h2 id="clienteNome">Cliente</h2>
+        <h2>De 0 a 10, qual a probabilidade de indicar a EMEX?</h2>
+        <div class="nps-scale" id="npsScale"></div>
+        <div class="legend">
+            <span>Pouco provável</span>
+            <span>Muito provável</span>
+        </div>
 
-    <p>Obrigado! Seu feedback é muito importante para a <b>EMEX</b>.</p>
+        <h2>Explique sua nota</h2>
+        <textarea class="textarea" id="comentario" placeholder="Digite sua resposta..."></textarea>
 
-    <p>Agradecemos por dedicar um momento para nos avaliar 😊</p>
+        <div class="actions">
+            <button class="btn btn-primary" id="enviar">Enviar feedback</button>
+            <button class="btn btn-secondary" id="googleBtn">Avaliar no Google</button>
+        </div>
 
-    <!-- GIF -->
-    <img class="gif" src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Gif de agradecimento">
+        <div class="google-tip">Dica: você pode colar o link do seu Google Forms direto no código (variável <code>googleFormsLink</code>).</div>
+
+        <div class="thank-you" id="thankYou">
+            <p id="mensagemFinal">Obrigado! Seu feedback é muito importante para nós.</p>
+            <img class="gif" src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Gif de agradecimento">
+        </div>
+    </div>
 
     <div class="footer">
         Desenvolvido por <b>EMEX</b>
     </div>
-
 </div>
 
 <script>
-    // Captura o nome do cliente pela URL
-    // Exemplo: ?nome=Maycon
+    // Configurar link do Google Forms aqui (se não tiver, deixa em branco)
+    const googleFormsLink = "";
+
+    // Captura o nome do cliente pela URL: ?nome=Maycon
     const urlParams = new URLSearchParams(window.location.search);
     const nome = urlParams.get('nome') || "Cliente";
-
     document.getElementById("clienteNome").textContent = nome;
 
-    // 🔴 Nenhum redirecionamento! Página totalmente estática.
+    // Monta botões NPS com cores de 0 a 10
+    const npsScale = document.getElementById("npsScale");
+    const colors = ["#b90f23", "#c21b1f", "#d12f1c", "#e1491c", "#f26b21", "#f9a22b", "#d6c522", "#c8dd2b", "#98c93d", "#70bb43", "#42a34b"];
+    let selectedScore = null;
+
+    colors.forEach((color, index) => {
+        const btn = document.createElement("button");
+        btn.className = "score-btn";
+        btn.style.background = color;
+        btn.textContent = index;
+        btn.setAttribute("aria-label", `Nota ${index}`);
+        btn.addEventListener("click", () => {
+            selectedScore = index;
+            document.querySelectorAll(".score-btn").forEach(b => b.classList.remove("selected"));
+            btn.classList.add("selected");
+        });
+        npsScale.appendChild(btn);
+    });
+
+    const thankYou = document.getElementById("thankYou");
+    const mensagemFinal = document.getElementById("mensagemFinal");
+    const comentario = document.getElementById("comentario");
+
+    document.getElementById("enviar").addEventListener("click", () => {
+        if (selectedScore === null) {
+            alert("Escolha uma nota de 0 a 10.");
+            return;
+        }
+
+        const texto = comentario.value.trim();
+        mensagemFinal.innerHTML = `${nome}, obrigado! Sua nota <b>${selectedScore}</b> e comentário foram registrados.`;
+        thankYou.style.display = "block";
+
+        // Se quiser mandar para o Google Forms, basta colar o link acima
+        if (googleFormsLink) {
+            window.open(googleFormsLink, "_blank");
+        }
+    });
+
+    document.getElementById("googleBtn").addEventListener("click", () => {
+        if (!googleFormsLink) {
+            alert("Adicione seu link do Google Forms na variável googleFormsLink.");
+            return;
+        }
+        window.open(googleFormsLink, "_blank");
+    });
+
+    // Nenhum redirecionamento automático; tudo acontece na página.
 </script>
 
 </body>

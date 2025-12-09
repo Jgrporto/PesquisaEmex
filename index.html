@@ -107,19 +107,26 @@
     }
 
     .nps-row-top {
-        grid-template-columns: repeat(6, minmax(48px, 1fr));
+        grid-template-columns: repeat(6, minmax(52px, 1fr));
     }
 
     .nps-row-bottom {
-        grid-template-columns: repeat(5, minmax(48px, 1fr));
+        grid-template-columns: repeat(5, minmax(52px, 1fr));
         padding: 0 12px;
     }
 
     .score-btn {
         border: none;
-        border-radius: 10px;
-        padding: 13px 0;
-        font-size: 17px;
+        border-radius: 12px;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        min-width: 52px;
+        max-width: 72px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
         font-weight: 700;
         color: #fff;
         cursor: pointer;

@@ -265,8 +265,8 @@
         <div class="tag">Pesquisa de satisfacao - NPS</div>
 
         <div id="screenScore" class="screen active">
-            <h1>Queremos ouvir voce!</h1>
-            <p class="question">De 0 a 10, qual a probabilidade de voce indicar a EMEX para um amigo ou colega?</p>
+            <h1>Queremos ouvir você!</h1>
+            <p class="question">De 0 a 10, qual a probabilidade de você indicar a EMEX para um amigo ou colega?</p>
 
             <div class="nps-scale">
                 <div class="nps-row nps-row-top" id="npsRowTop"></div>
@@ -300,7 +300,7 @@
 <script>
     const googleReviewLink = "https://g.page/r/CbtxDmKG0tleEAE/review";
     const whatsappNumber = "558000243200";
-    const whatsappMessage = encodeURIComponent("Pesquisa de Satisfacao");
+    const whatsappMessage = encodeURIComponent("Falar com o setor sobre a pesquisa!");
 
     // Se quiser registrar no Google Forms, coloque o formResponse e os IDs dos campos
     const googleFormsAction = ""; // ex: "https://docs.google.com/forms/d/e/FORM_ID/formResponse"
@@ -395,6 +395,7 @@
     };
 
     const openWhatsApp = () => {
+        alert("Sera necessario transferir o seu atendimento para o nosso setor responsavel para resolvermos esse problema!\n\nAssim que chegar na tela do WhatsApp, aperte para enviar a mensagem que vamos te atender em segundos!");
         const waLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
         window.location.href = waLink;
     };

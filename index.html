@@ -90,13 +90,29 @@
 
     .nps-scale {
         margin: 18px 0 12px;
-        display: grid;
-        grid-template-columns: repeat(6, minmax(44px, 1fr));
+        display: flex;
+        flex-direction: column;
         gap: 12px;
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid var(--border);
         border-radius: 18px;
         padding: 18px 16px;
+    }
+
+    .nps-row {
+        display: grid;
+        gap: 12px;
+        justify-content: center;
+        justify-items: center;
+    }
+
+    .nps-row-top {
+        grid-template-columns: repeat(6, minmax(48px, 1fr));
+    }
+
+    .nps-row-bottom {
+        grid-template-columns: repeat(5, minmax(48px, 1fr));
+        padding: 0 12px;
     }
 
     .score-btn {
@@ -223,9 +239,12 @@
 
         <div id="screenScore" class="screen active">
             <h1>Queremos ouvir voce, <span id="clienteNome">Cliente</span>!</h1>
-            <p>De 0 a 10 qual a probabilidade de voce indicar a EMEX para um amigo ou colega?</p>
+            <p>De 0 a 10, qual a probabilidade de voce indicar a EMEX para um amigo ou colega?</p>
 
-            <div class="nps-scale" id="npsScale"></div>
+            <div class="nps-scale">
+                <div class="nps-row nps-row-top" id="npsRowTop"></div>
+                <div class="nps-row nps-row-bottom" id="npsRowBottom"></div>
+            </div>
             <div class="legend">
                 <span>Pouco provavel</span>
                 <span>Muito provavel</span>
@@ -268,8 +287,9 @@
     const nome = urlParams.get("nome") || "Cliente";
     document.getElementById("clienteNome").textContent = nome;
 
-    // Monta botoes NPS com cores de 0 a 10
-    const npsScale = document.getElementById("npsScale");
+    // Monta botoes NPS com cores de 0 a 10 em duas linhas (0-5 / 6-10)
+    const npsRowTop = document.getElementById("npsRowTop");
+    const npsRowBottom = document.getElementById("npsRowBottom");
     const colors = ["#b11922", "#c22327", "#d33726", "#e25c26", "#f08b27", "#f5b12f", "#d8c830", "#c6d934", "#9bcf3b", "#6cbb3e", "#46a64a"];
     let selectedScore = null;
 
@@ -308,7 +328,12 @@
             comentario.scrollIntoView({ behavior: "smooth", block: "start" });
             comentario.focus({ preventScroll: true });
         });
-        npsScale.appendChild(btn);
+
+        if (index <= 5) {
+            npsRowTop.appendChild(btn);
+        } else {
+            npsRowBottom.appendChild(btn);
+        }
     });
 
     const submitToGoogleForms = async ({ name, score, comment }) => {

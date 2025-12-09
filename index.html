@@ -106,8 +106,8 @@
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid var(--border);
         border-radius: 18px;
-        padding: 16px 12px;
-        max-width: 480px;
+        padding: 14px 10px;
+        max-width: 460px;
     }
 
     .nps-row {
@@ -118,11 +118,11 @@
     }
 
     .nps-row-top {
-        grid-template-columns: repeat(6, minmax(46px, 1fr));
+        grid-template-columns: repeat(6, minmax(44px, 1fr));
     }
 
     .nps-row-bottom {
-        grid-template-columns: repeat(5, minmax(46px, 1fr));
+        grid-template-columns: repeat(5, minmax(44px, 1fr));
         padding: 0 6px;
     }
 
@@ -131,8 +131,8 @@
         border-radius: 10px;
         width: 100%;
         aspect-ratio: 1 / 1;
-        min-width: 46px;
-        max-width: 64px;
+        min-width: 44px;
+        max-width: 60px;
         padding: 0;
         display: inline-flex;
         align-items: center;
@@ -244,6 +244,15 @@
         h2 { font-size: 18px; }
         .actions { flex-direction: column; }
         .actions .btn { width: 100%; }
+    }
+
+    @media (max-width: 420px) {
+        .shell { transform: scale(0.92); }
+        .nps-scale { padding: 12px 8px; gap: 8px; }
+        .nps-row { gap: 8px; }
+        .nps-row-top { grid-template-columns: repeat(6, minmax(40px, 1fr)); }
+        .nps-row-bottom { grid-template-columns: repeat(5, minmax(40px, 1fr)); padding: 0 4px; }
+        .score-btn { min-width: 40px; max-width: 54px; font-size: 16px; }
     }
 </style>
 </head>

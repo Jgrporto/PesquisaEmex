@@ -88,31 +88,37 @@
         text-align: center;
     }
 
+    .question {
+        text-align: left;
+        margin: 0 0 14px;
+    }
+
     .nps-scale {
-        margin: 18px 0 12px;
+        margin: 18px auto 12px;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 10px;
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid var(--border);
         border-radius: 18px;
-        padding: 18px 16px;
+        padding: 18px 14px;
+        max-width: 520px;
     }
 
     .nps-row {
         display: grid;
-        gap: 12px;
+        gap: 10px;
         justify-content: center;
         justify-items: center;
     }
 
     .nps-row-top {
-        grid-template-columns: repeat(6, minmax(52px, 1fr));
+        grid-template-columns: repeat(6, minmax(50px, 1fr));
     }
 
     .nps-row-bottom {
-        grid-template-columns: repeat(5, minmax(52px, 1fr));
-        padding: 0 12px;
+        grid-template-columns: repeat(5, minmax(50px, 1fr));
+        padding: 0 10px;
     }
 
     .score-btn {
@@ -120,8 +126,8 @@
         border-radius: 12px;
         width: 100%;
         aspect-ratio: 1 / 1;
-        min-width: 52px;
-        max-width: 72px;
+        min-width: 50px;
+        max-width: 70px;
         padding: 0;
         display: inline-flex;
         align-items: center;
@@ -246,7 +252,7 @@
 
         <div id="screenScore" class="screen active">
             <h1>Queremos ouvir voce, <span id="clienteNome">Cliente</span>!</h1>
-            <p>De 0 a 10, qual a probabilidade de voce indicar a EMEX para um amigo ou colega?</p>
+            <p class="question">De 0 a 10, qual a probabilidade de voce indicar a EMEX para um amigo ou colega?</p>
 
             <div class="nps-scale">
                 <div class="nps-row nps-row-top" id="npsRowTop"></div>

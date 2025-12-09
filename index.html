@@ -265,7 +265,7 @@
         <div class="tag">Pesquisa de satisfacao - NPS</div>
 
         <div id="screenScore" class="screen active">
-            <h1>Queremos ouvir voce, <span id="clienteNome">Cliente</span>!</h1>
+            <h1>Queremos ouvir voce!</h1>
             <p class="question">De 0 a 10, qual a probabilidade de voce indicar a EMEX para um amigo ou colega?</p>
 
             <div class="nps-scale">
@@ -305,14 +305,16 @@
     // Se quiser registrar no Google Forms, coloque o formResponse e os IDs dos campos
     const googleFormsAction = ""; // ex: "https://docs.google.com/forms/d/e/FORM_ID/formResponse"
     const googleFormsFields = {
-        name: "",    // ex: "entry.123456"
+        code: "",    // ex: "entry.111111"
         score: "",   // ex: "entry.789012"
         comment: ""  // ex: "entry.345678"
     };
 
+    // Opcional: endpoint de Apps Script / webhook para gravar direto no Google Sheets
+    const googleSheetsEndpoint = "https://script.google.com/macros/s/AKfycbzBZSRgLJmTExNw63S-iSO5uPMm0aCY8D8tBXf5W1seMqwxfsb7cOOe8qEcEz73JFngOA/exec";
+
     const urlParams = new URLSearchParams(window.location.search);
-    const nome = urlParams.get("nome") || "Cliente";
-    document.getElementById("clienteNome").textContent = nome;
+    const codigo = urlParams.get("codigo") || "";
 
     // Monta botoes NPS com cores de 0 a 10 em duas linhas (0-5 / 6-10)
     const npsRowTop = document.getElementById("npsRowTop");
@@ -363,18 +365,32 @@
         }
     });
 
-    const submitToGoogleForms = async ({ name, score, comment }) => {
-        if (!googleFormsAction || !googleFormsFields.name || !googleFormsFields.score || !googleFormsFields.comment) {
+    const submitToGoogleForms = async ({ code, score, comment }) => {
+        if (!googleFormsAction || !googleFormsFields.score || !googleFormsFields.comment) {
             return;
         }
         const data = new FormData();
-        data.append(googleFormsFields.name, name);
+        if (googleFormsFields.code) data.append(googleFormsFields.code, code);
         data.append(googleFormsFields.score, score);
         data.append(googleFormsFields.comment, comment);
         try {
             await fetch(googleFormsAction, { method: "POST", mode: "no-cors", body: data });
         } catch (err) {
             console.error("Falha ao enviar para Google Forms", err);
+        }
+    };
+
+    const submitToSheet = async ({ code, score, comment }) => {
+        if (!googleSheetsEndpoint) return;
+        try {
+            await fetch(googleSheetsEndpoint, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ code, score, comment })
+            });
+        } catch (err) {
+            console.error("Falha ao enviar para Google Sheets", err);
         }
     };
 
@@ -397,21 +413,22 @@
         thankYou.style.display = "block";
         screenComment.classList.remove("active");
 
-        await submitToGoogleForms({ name: nome, score: selectedScore, comment: texto });
+        await submitToGoogleForms({ code: codigo, score: selectedScore, comment: texto });
+        await submitToSheet({ code: codigo, score: selectedScore, comment: texto });
 
         if (selectedScore <= 6) {
-            mensagemFinal.innerHTML = `${nome}, sentimos muito! Vamos te atender no WhatsApp para resolver.`;
+            mensagemFinal.innerHTML = `Sentimos muito! Vamos te atender no WhatsApp para resolver.`;
             setTimeout(openWhatsApp, 500);
             return;
         }
 
         if (selectedScore === 10) {
-            mensagemFinal.innerHTML = `${nome}, obrigado! Voce sera redirecionado para avaliar no Google.`;
+            mensagemFinal.innerHTML = `Obrigado! Voce sera redirecionado para avaliar no Google.`;
             setTimeout(openGoogleReview, 500);
             return;
         }
 
-        mensagemFinal.innerHTML = `${nome}, obrigado! Sua nota <b>${selectedScore}</b> foi registrada.`;
+        mensagemFinal.innerHTML = `Obrigado! Sua nota <b>${selectedScore}</b> foi registrada.`;
     });
 </script>
 

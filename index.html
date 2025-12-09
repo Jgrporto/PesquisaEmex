@@ -293,7 +293,7 @@
     </div>
 
     <div class="footer">
-        Desenvolvido por <b>Joao Porto</b>
+        Desenvolvido por <b>João Porto</b>
     </div>
 </div>
 
@@ -345,7 +345,7 @@
 
             if (selectedScore >= 9) {
                 commentTitle.textContent = "Uau! Porque merecemos essa otima nota?";
-                commentSubtitle.textContent = "Conte os pontos altos da sua experiencia.";
+                commentSubtitle.textContent = "Conte os pontos altos da sua experiência.";
             } else if (selectedScore >= 7) {
                 commentTitle.textContent = "O que podemos melhorar para ganhar um 10?";
                 commentSubtitle.textContent = "Sua dica ajuda a priorizar as proximas melhorias.";
@@ -395,7 +395,6 @@
     };
 
     const openWhatsApp = () => {
-        alert("Sera necessario transferir o seu atendimento para o nosso setor responsavel para resolvermos esse problema!\n\nAssim que chegar na tela do WhatsApp, aperte para enviar a mensagem que vamos te atender em segundos!");
         const waLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
         window.location.href = waLink;
     };
@@ -412,24 +411,23 @@
 
         const texto = comentario.value.trim();
         thankYou.style.display = "block";
+        mensagemFinal.textContent = "Obrigado! Seu feedback e muito importante para nos.";
         screenComment.classList.remove("active");
 
         await submitToGoogleForms({ code: codigo, score: selectedScore, comment: texto });
         await submitToSheet({ code: codigo, score: selectedScore, comment: texto });
 
         if (selectedScore <= 6) {
-            mensagemFinal.innerHTML = `Sentimos muito! Vamos te atender no WhatsApp para resolver.`;
+            mensagemFinal.textContent = "So um momento! Vamos te transferir para o setor responsavel. Na tela do WhatsApp, aperte para enviar a mensagem.";
             setTimeout(openWhatsApp, 500);
             return;
         }
 
         if (selectedScore === 10) {
-            mensagemFinal.innerHTML = `Obrigado! Voce sera redirecionado para avaliar no Google.`;
+            mensagemFinal.textContent = "Obrigado! Vamos abrir a pagina de avaliacao em instantes.";
             setTimeout(openGoogleReview, 500);
             return;
         }
-
-        mensagemFinal.innerHTML = `Obrigado! Sua nota <b>${selectedScore}</b> foi registrada.`;
     });
 </script>
 

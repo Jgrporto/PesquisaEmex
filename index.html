@@ -199,11 +199,22 @@
     .thank-you {
         margin-top: 22px;
         text-align: center;
-        padding: 16px 14px;
+        padding: 18px 16px;
         border-radius: 14px;
         background: rgba(255, 255, 255, 0.06);
         border: 1px solid var(--border);
         display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .celebration-gif {
+        width: 100%;
+        max-width: 520px;
+        border-radius: 14px;
+        display: none;
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.32);
     }
 
     .footer {
@@ -288,7 +299,8 @@
         </div>
 
         <div class="thank-you" id="thankYou">
-            <p id="mensagemFinal">Obrigado! Seu feedback e muito importante para nos.</p>
+            <p id="mensagemFinal">Obrigado! Vamos te redirecionar para nossa pagina no Google para registrar sua avaliacao.</p>
+            <img id="celebrationGif" class="celebration-gif" src="https://media.giphy.com/media/l0MYEqEzwMWFCg8rm/giphy.gif" alt="Animacao comemorativa">
         </div>
     </div>
 
@@ -328,6 +340,7 @@
     const commentSubtitle = document.getElementById("commentSubtitle");
     const thankYou = document.getElementById("thankYou");
     const mensagemFinal = document.getElementById("mensagemFinal");
+    const celebrationGif = document.getElementById("celebrationGif");
     const comentario = document.getElementById("comentario");
 
     colors.forEach((color, index) => {
@@ -411,7 +424,9 @@
 
         const texto = comentario.value.trim();
         thankYou.style.display = "block";
-        mensagemFinal.textContent = "Obrigado! Seu feedback e muito importante para nos.";
+        screenScore.classList.remove("active");
+        celebrationGif.style.display = "block";
+        mensagemFinal.textContent = "Obrigado! Vamos te redirecionar para nossa pagina no Google para registrar sua avaliacao.";
         screenComment.classList.remove("active");
 
         await submitToGoogleForms({ code: codigo, score: selectedScore, comment: texto });
@@ -419,15 +434,20 @@
 
         if (selectedScore <= 6) {
             mensagemFinal.textContent = "So um momento! Vamos te transferir para o setor responsavel. Na tela do WhatsApp, aperte para enviar a mensagem.";
+            celebrationGif.style.display = "none";
             setTimeout(openWhatsApp, 500);
             return;
         }
 
         if (selectedScore === 10) {
-            mensagemFinal.textContent = "Obrigado! Vamos abrir a pagina de avaliacao em instantes.";
-            setTimeout(openGoogleReview, 500);
+            mensagemFinal.textContent = "Obrigado! Vamos te redirecionar para nossa pagina no Google para registrar sua avaliacao.";
+            celebrationGif.style.display = "block";
+            setTimeout(openGoogleReview, 1200);
             return;
         }
+
+        mensagemFinal.textContent = "Obrigado pelo feedback! Vamos usar suas ideias para melhorar.";
+        celebrationGif.style.display = "none";
     });
 </script>
 
